@@ -11,6 +11,7 @@
 		9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */; };
 		9FFEBCCA2C5C7AA60069BF8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */; };
 		9FFEBCCD2C5C7AA60069BF8D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FFEBCCC2C5C7AA60069BF8D /* Preview Assets.xcassets */; };
+		9FFEBCD52C5C7E650069BF8D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCD42C5C7E650069BF8D /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9FFEBCCC2C5C7AA60069BF8D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9FFEBCCE2C5C7AA60069BF8D /* HanYoungHater.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HanYoungHater.entitlements; sourceTree = "<group>"; };
+		9FFEBCD42C5C7E650069BF8D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 		9FFEBCC42C5C7AA50069BF8D /* HanYoungHater */ = {
 			isa = PBXGroup;
 			children = (
+				9FFEBCD42C5C7E650069BF8D /* AppDelegate.swift */,
 				9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */,
 				9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */,
 				9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */,
@@ -139,6 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FFEBCD52C5C7E650069BF8D /* AppDelegate.swift in Sources */,
 				9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */,
 				9FFEBCC62C5C7AA50069BF8D /* HanYoungHaterApp.swift in Sources */,
 			);

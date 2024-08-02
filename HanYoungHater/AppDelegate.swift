@@ -2,10 +2,12 @@ import Cocoa
 import SwiftUI
 import Carbon
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var eventTap: CFMachPort?
-    var currentInputString: String = ""
-    var isAutoConvertOn: Bool = true
+    @Published var currentInputSource: String = ""
+    @Published var currentInputString: String = ""
+    @Published var isAutoConvertOn: Bool = false
+    
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         requestAccessibilityPermissions()
@@ -38,34 +40,135 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
-        if type == .keyDown {
+        if type == .keyDown && isAutoConvertOn && isKoreanInputSourceActive() {
+            print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             
             if let character = characterForKeyCode(keyCode) {
                 currentInputString.append(character)
                 print("Current Input String: \(currentInputString)")
-                
-//                if currentInputString.hasSuffix("님차") {
-//                    replaceLastInput(with: "slack")
-//                    currentInputString = ""
-//                }
                 if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") {
                     replaceLastInput(with: "slack")
                     currentInputString = ""
+                    switchToEnglishInputSource()
+                    if !isKoreanInputSourceActive() {
+                        print("한영 전환 성공, 현재 상태: \(currentInputSource)")
+                    }
+                    print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
+
                 }
             }
         }
         return Unmanaged.passRetained(event)
     }
     
+    private func checkStrings() -> Bool {
+        let slack = "님차"
+        let notion = "ㅜㅐ샤ㅐㅜ"
+        let chrome = "초개ㅡㄷ"
+        let safari = "ㄴㅁㄹㅁ갸"
+        let strings = [slack, notion, chrome, safari]
+        
+        for string in strings {
+            if currentInputString.hasSuffix(string) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     private func characterForKeyCode(_ keyCode: Int64) -> String? {
         let keyMapping: [Int64: String] = [
-            0x1: "ㄴ", // 1
-            0x25: "ㅣ", // 25
-            0x0: "ㅁ", // 0
-            0x8: "ㅊ", // 8
-            0x28: "ㅏ" // 40
             // 필요한 키코드 매핑 추가
+            // - 님차 for Slack
+            0x1: "ㄴ", // 1, s
+            0x25: "ㅣ", // 25, l
+            0x0: "ㅁ", // 0, a
+            0x8: "ㅊ", // 8, c
+            0x28: "ㅏ", // 40, k
+            
+            // - ㅜㅐ샤ㅐㅜ for Notion
+            0x2D: "ㅜ", // 45, n
+            0x1F: "ㅐ", // 31, o
+            0x11: "ㅅ", // 17, t
+            0x22: "ㅑ", // 34, i
+            //0x1F: "ㅐ", // 31, o
+            //0x2D: "ㅜ", // 45, n
+
+            // 초개ㅡㄷ for Chrome
+            //0x08: "ㅊ", // 8, c
+            0x04: "ㅗ", // 4, h
+            0x0F: "ㄱ", // 15, r
+            //0x1F: "ㅐ", // 31, o
+            0x2E: "ㅡ", // 46, m
+            0x0E: "ㄷ", // 14, e
+            
+            // ㄴㅁㄹㅁ갸 for Sarari
+            //0x01: "ㄴ", // 1, s
+            //0x00: "ㅁ", // 0, a
+            //0x03: "ㄹ", // 3, r
+            //0x00: "ㅁ", // 0, av
+            //0x0F: "ㄱ", // 15, r
+            //0x22: "ㅑ", // 34, i
+
+            
+            // ALL: 필요시 위로 가져다 쓰기
+            0x02: "d", // 2
+            0x05: "g", // 5
+            0x06: "z", // 6
+            0x07: "x", // 7
+            0x09: "v", // 9
+            0x0B: "b", // 11
+            0x0C: "q", // 12
+            0x0D: "w", // 13
+            0x10: "y", // 16
+            0x12: "1", // 18
+            0x13: "2", // 19
+            0x14: "3", // 20
+            0x15: "4", // 21
+            0x16: "6", // 22
+            0x17: "5", // 23
+            0x18: "=", // 24
+            0x19: "9", // 25
+            0x1A: "7", // 26
+            0x1B: "-", // 27
+            0x1C: "8", // 28
+            0x1D: "0", // 29
+            0x1E: "]", // 30
+            0x20: "u", // 32
+            0x21: "[", // 33
+            0x23: "p", // 35
+            0x26: "j", // 38
+            0x27: "'", // 39
+            0x29: ";", // 41
+            0x2A: "\\", // 42
+            0x2B: ",", // 43
+            0x2C: "/", // 44
+            0x2F: ".", // 47
+            0x32: "`", // 50
+            0x31: " ", // 49 (Space)
+            0x24: "\n", // 36 (Return)
+            0x30: "\t", // 48 (Tab)
+            0x33: "\u{8}", // 51 (Delete)
+            0x35: "\u{1B}", // 53 (Esc)
+            0x37: "\u{2318}", // 55 (Command)
+            0x38: "\u{21E7}", // 56 (Shift)
+            0x39: "\u{21EA}", // 57 (Caps Lock)
+            0x3A: "\u{2325}", // 58 (Option)
+            0x3B: "\u{2303}", // 59 (Control)
+            0x7A: "F1", // 122
+            0x78: "F2", // 120
+            0x63: "F3", // 99
+            0x76: "F4", // 118
+            0x60: "F5", // 96
+            0x61: "F6", // 97
+            0x62: "F7", // 98
+            0x64: "F8", // 100
+            0x65: "F9", // 101
+            0x6D: "F10", // 109
+            0x67: "F11", // 103
+            0x6F: "F12" // 111
         ]
         return keyMapping[keyCode]
     }
@@ -90,7 +193,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func keyCode(for character: Character) -> CGKeyCode {
-        // 대체할 문자열의 각 문자의 키코드를 반환합니다. 필요한 경우 추가하세요.
+        // 대체할 문자열의 각 문자의 키코드를 반환합니다.
         let keyMapping: [Character: CGKeyCode] = [
             "s": 1,
             "l": 37,
@@ -119,9 +222,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func isKoreanInputSourceActive() -> Bool {
         if let sourceID = getCurrentKeyboardInputSourceID() {
-            return sourceID.contains("Hangul")
+            return sourceID.contains("Korean")
         }
         return false
+    }
+    
+    func updateCurrentInputSource() {
+        if isKoreanInputSourceActive() {
+            currentInputSource = "한글"
+        } else {
+            currentInputSource = "영어"
+        }
+    }
+    
+    private func switchToEnglishInputSource() {
+        guard let sourceList = TISCreateInputSourceList(nil, false)?.takeUnretainedValue() as? [TISInputSource] else { return }
+        
+        for source in sourceList {
+            guard let sourceIDPointer = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) else { continue }
+            let sourceID = Unmanaged<CFString>.fromOpaque(sourceIDPointer).takeUnretainedValue() as String
+            
+            if sourceID.contains("com.apple.keylayout.ABC") {
+                TISSelectInputSource(source)
+                print("영어 입력 소스로 변경되었습니다.")
+                updateCurrentInputSource()
+                return
+            }
+        }
+        print("영어 입력 소스를 찾을 수 없습니다.")
     }
 }
 

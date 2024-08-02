@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isAutoConvertOn = false
+    @ObservedObject var appDelegate: AppDelegate
+    
     @State private var testInput = ""
-    //@State private var showingAlert = false
-    @State private var showingAlert = true
+    @State private var showingAlert = false
     
     var body: some View {
         VStack {
@@ -12,13 +12,11 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .padding()
             
-            Toggle("자동 전환 켜기", isOn: $isAutoConvertOn)
+            Toggle("자동 전환 켜기", isOn: $appDelegate.isAutoConvertOn)
                 .padding()
-                .onChange(of: isAutoConvertOn) { value in
-                    if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
-                        appDelegate.isAutoConvertOn = value
-                    }
-                }
+            
+            Text("현재 입력 소스: \(appDelegate.currentInputSource)")
+                .padding()
             
             TextField("여기에 테스트 텍스트를 입력하세요", text: $testInput)
                 .padding()
@@ -30,6 +28,7 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             showingAlert = true
+            appDelegate.updateCurrentInputSource() // 화면이 나타날 때 현재 입력 소스를 초기화합니다.
         }
         .alert(isPresented: $showingAlert) {
             Alert(
@@ -43,6 +42,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(appDelegate: AppDelegate())
     }
 }

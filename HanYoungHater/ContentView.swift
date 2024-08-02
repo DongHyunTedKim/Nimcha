@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  HanYoungHater
-//
-//  Created by Ted Kim on 8/2/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -20,6 +13,11 @@ struct ContentView: View {
             
             Toggle("자동 전환 켜기", isOn: $isAutoConvertOn)
                 .padding()
+                .onChange(of: isAutoConvertOn) { value in
+                    if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
+                        appDelegate.isAutoConvertOn = value
+                    }
+                }
             
             TextField("여기에 테스트 텍스트를 입력하세요", text: $testInput)
                 .padding()

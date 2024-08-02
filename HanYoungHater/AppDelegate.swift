@@ -4,14 +4,13 @@ import Carbon
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     var eventTap: CFMachPort?
-    var isAutoConvertOn: Bool = false
-    var isKorean: Bool = false
+    var currentInputString: String = ""
+    var isAutoConvertOn: Bool = true
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         requestAccessibilityPermissions()
-        self.isAutoConvertOn = true // 자동 전환 기능 활성화
-
-        let eventMask: CGEventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.flagsChanged.rawValue)
+        
+        let eventMask: CGEventMask = (1 << CGEventType.keyDown.rawValue)
         
         eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
                                      place: .headInsertEventTap,
@@ -39,58 +38,75 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
-        print("-------------------")
-        print("Event type: \(type.rawValue)")
-
         if type == .keyDown {
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-            print("- Key pressed: \(keyCode)")
-
-            isKorean = isKoreanInputSourceActive()
-//            if isKoreanInputSourceActive() {
-//                print("현재 한글 입력 모드입니다.")
-//            } else {
-//                print("현재 영어 입력 모드입니다.")
-//            }
-            if let inputSource = getCurrentKeyboardInputSourceID() {
-                print("- source: \(inputSource)")
-            }
-
-            if isAutoConvertOn {
-                if let newEvent = transformKeyEvent(event: event) {
-                    return Unmanaged.passRetained(newEvent)
+            
+            if let character = characterForKeyCode(keyCode) {
+                currentInputString.append(character)
+                print("Current Input String: \(currentInputString)")
+                
+//                if currentInputString.hasSuffix("님차") {
+//                    replaceLastInput(with: "slack")
+//                    currentInputString = ""
+//                }
+                if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") {
+                    replaceLastInput(with: "slack")
+                    currentInputString = ""
                 }
             }
         }
         return Unmanaged.passRetained(event)
     }
-
-    private func transformKeyEvent(event: CGEvent) -> CGEvent? {
-        let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-        
-        let keyMapping: [Int64: Int64] = [
-            //0x12: 0x05, // '1' -> 'ㅎ'
-            //0x05: 012, // 'ㅎ' -> '1'
-            0x1C: 0x43, // 'ㅌ' -> 'x'
-            //    ...
-            // 더 많은 매핑 추가
+    
+    private func characterForKeyCode(_ keyCode: Int64) -> String? {
+        let keyMapping: [Int64: String] = [
+            0x1: "ㄴ", // 1
+            0x25: "ㅣ", // 25
+            0x0: "ㅁ", // 0
+            0x8: "ㅊ", // 8
+            0x28: "ㅏ" // 40
+            // 필요한 키코드 매핑 추가
         ]
+        return keyMapping[keyCode]
+    }
+    
+    private func replaceLastInput(with replacement: String) {
+        let source = CGEventSource(stateID: .hidSystemState)
         
-        if let newKeyCode = keyMapping[keyCode] {
-            event.setIntegerValueField(.keyboardEventKeycode, value: newKeyCode)
-            print("- New keycode: \(newKeyCode)")
-            return event
+        for _ in 0..<currentInputString.count {
+            let backspace = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: true)
+            backspace?.post(tap: .cghidEventTap)
+            let backspaceUp = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: false)
+            backspaceUp?.post(tap: .cghidEventTap)
         }
         
-        return nil
+        for char in replacement {
+            let keyCode = keyCode(for: char)
+            let keyDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
+            keyDown?.post(tap: .cghidEventTap)
+            let keyUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
+            keyUp?.post(tap: .cghidEventTap)
+        }
     }
-
+    
+    private func keyCode(for character: Character) -> CGKeyCode {
+        // 대체할 문자열의 각 문자의 키코드를 반환합니다. 필요한 경우 추가하세요.
+        let keyMapping: [Character: CGKeyCode] = [
+            "s": 1,
+            "l": 37,
+            "a": 0,
+            "c": 8,
+            "k": 40
+        ]
+        return keyMapping[character] ?? 0
+    }
+    
     private func requestAccessibilityPermissions() {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         let _ = AXIsProcessTrustedWithOptions(options)
     }
-    
-    func getCurrentKeyboardInputSourceID() -> String? {
+
+    private func getCurrentKeyboardInputSourceID() -> String? {
         guard let source = TISCopyCurrentKeyboardInputSource()?.takeUnretainedValue() else {
             return nil
         }
@@ -98,20 +114,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return nil
         }
         let sourceID = Unmanaged<CFString>.fromOpaque(sourceIDPointer).takeUnretainedValue() as String
-        
-        if sourceID.contains("Korean") {
-            return "Korean"
-        }
-        else if sourceID.contains("ABC") {
-            return "US"
-        }
-        return "unknown sourceID = \(sourceID)"
+        return sourceID
     }
 
     private func isKoreanInputSourceActive() -> Bool {
         if let sourceID = getCurrentKeyboardInputSourceID() {
-            return sourceID.contains("2SetKorean")
+            return sourceID.contains("Hangul")
         }
         return false
     }
 }
+

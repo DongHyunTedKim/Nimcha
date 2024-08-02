@@ -3,7 +3,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var isAutoConvertOn = false
     @State private var testInput = ""
-    @State private var showingAlert = false
+    //@State private var showingAlert = false
+    @State private var showingAlert = true
     
     var body: some View {
         VStack {

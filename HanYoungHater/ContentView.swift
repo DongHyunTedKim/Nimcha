@@ -21,6 +21,10 @@ struct ContentView: View {
             TextField("여기에 테스트 텍스트를 입력하세요", text: $testInput)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                // 타이핑될때마다 한영확인
+                .onChange(of: testInput) { newValue in
+                    appDelegate.updateCurrentInputSource()
+                }
             
             Spacer()
         }

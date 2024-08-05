@@ -41,53 +41,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         if type == .keyDown && isAutoConvertOn && isKoreanInputSourceActive() {
-            print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
+            
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             
             if let character = characterForKeyCode(keyCode) {
                 currentInputString.append(character)
                 print("Current Input String: \(currentInputString)")
-                if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") {
-                    replaceLastInput(with: "slack")
-                    currentInputString = ""
-                    switchToEnglishInputSource()
-                    if !isKoreanInputSourceActive() {
-                        print("한영 전환 성공, 현재 상태: \(currentInputSource)")
-                    }
-                    print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
+                
+                if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") { // "님차"가 입력되면
+                    currentInputString = "님ㅊㅏ"
+                    replaceLastInput(with: "slack") // "slack"으로 대체하고
+                    currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
+                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
                 }
                 
-                else if currentInputString.hasSuffix("ㅜㅐㅅㅑㅐㅜ") {
-                    replaceLastInput(with: "notion")
-                    currentInputString = ""
-                    switchToEnglishInputSource()
-                    if !isKoreanInputSourceActive() {
-                        print("한영 전환 성공, 현재 상태: \(currentInputSource)")
-                    }
-                    print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
+                else if currentInputString.hasSuffix("ㅜㅐㅅㅑㅐㅜ") { // "ㅜㅐ샤ㅐㅜ"가 입력되면
+                    replaceLastInput(with: "notion") // "notion"으로 대체하고
+                    currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
+                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
                 }
                 
                 else if currentInputString.hasSuffix("ㅊㅗㄱㅐㅡㄷ") {
                     replaceLastInput(with: "chrome")
-                    
                     currentInputString = ""
                     switchToEnglishInputSource()
-                    if !isKoreanInputSourceActive() {
-                        print("한영 전환 성공, 현재 상태: \(currentInputSource)")
-                    }
-                    print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
                 }
                 
                 else if currentInputString.hasSuffix("ㄴㅁㄹㅁㄱㅑ"){
                     replaceLastInput(with: "safari")
                     currentInputString = ""
                     switchToEnglishInputSource()
-                    if !isKoreanInputSourceActive() {
-                        print("한영 전환 성공, 현재 상태: \(currentInputSource)")
-                    }
-                    print("isKoreanInputSourceActive: \(isKoreanInputSourceActive())")
                 }
             }
+            
         }
         return Unmanaged.passRetained(event)
     }
@@ -242,6 +228,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         return false
     }
     
+    /* func updateCurrentInputSource()
+       입력 소스 변경된 것을 앱에 표시하기 위해 사용
+     */
     func updateCurrentInputSource() {
         if isKoreanInputSourceActive() {
             currentInputSource = "한글"
@@ -259,7 +248,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             
             if sourceID.contains("com.apple.keylayout.ABC") {
                 TISSelectInputSource(source)
-                print("영어 입력 소스로 변경되었습니다.")
+                print("입력소스가 변경됐습니다. (한글->영어)")
                 updateCurrentInputSource()
                 return
             }

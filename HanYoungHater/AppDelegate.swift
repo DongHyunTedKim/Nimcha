@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 currentInputString = String(currentInputString.suffix(10))
             }
             
-            // delete키가 눌렸을 경우
+            // delete를 눌렀을 경우
             if keyCode == 0x33 && !currentInputString.isEmpty { // 0x33 = 51 (delete)
                 currentInputString.removeLast()
                 print("Current Input String: \(currentInputString)")
@@ -60,6 +60,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 
                 currentInputString.append(character)
                 print("Current Input String: \(currentInputString)")
+                
+                
                 
                 if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") { // "님차"가 입력되면
                     currentInputString = "님ㅊㅏ"

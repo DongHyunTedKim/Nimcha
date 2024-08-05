@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F909C442C60904100DF2D75 /* Patterns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F909C432C60904100DF2D75 /* Patterns.swift */; };
+		9F909C462C60910000DF2D75 /* PatternsList.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9F909C452C60910000DF2D75 /* PatternsList.rtf */; };
 		9FFEBCC62C5C7AA50069BF8D /* HanYoungHaterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */; };
 		9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */; };
 		9FFEBCCA2C5C7AA60069BF8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F909C432C60904100DF2D75 /* Patterns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patterns.swift; sourceTree = "<group>"; };
+		9F909C452C60910000DF2D75 /* PatternsList.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = PatternsList.rtf; sourceTree = "<group>"; };
 		9FFEBCC22C5C7AA50069BF8D /* HanYoungHater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanYoungHater.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanYoungHaterApp.swift; sourceTree = "<group>"; };
 		9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 				9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */,
 				9FFEBCCE2C5C7AA60069BF8D /* HanYoungHater.entitlements */,
 				9FFEBCCB2C5C7AA60069BF8D /* Preview Content */,
+				9F909C432C60904100DF2D75 /* Patterns.swift */,
+				9F909C452C60910000DF2D75 /* PatternsList.rtf */,
 			);
 			path = HanYoungHater;
 			sourceTree = "<group>";
@@ -130,6 +136,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F909C462C60910000DF2D75 /* PatternsList.rtf in Resources */,
 				9FFEBCCD2C5C7AA60069BF8D /* Preview Assets.xcassets in Resources */,
 				9FFEBCCA2C5C7AA60069BF8D /* Assets.xcassets in Resources */,
 			);
@@ -144,6 +151,7 @@
 			files = (
 				9FFEBCD52C5C7E650069BF8D /* AppDelegate.swift in Sources */,
 				9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */,
+				9F909C442C60904100DF2D75 /* Patterns.swift in Sources */,
 				9FFEBCC62C5C7AA50069BF8D /* HanYoungHaterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

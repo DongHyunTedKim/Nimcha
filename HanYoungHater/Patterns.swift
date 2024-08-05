@@ -15,31 +15,38 @@ var patterns: [String: [String: String]] = [
     "chrome" : ["ㅊㅗㄱㅐㅡㄷ" : "초개ㅡㄷ"],
     "safari" : ["ㄴㅁㄹㅁㄱㅑ" : "ㄴㅁㄹㅁㄱㅑ"],
     "cyworld" : ["ㅊㅛㅈㅐㄱㅣㅇ" : "쵸재기ㅇ"],
+    "kakao" : ["ㅏㅁㅏㅁㅐ" : "ㅏ마매"],
+    //
+    "tele" : ["ㅅㄷㅣㄷ" : "ㅅ디ㄷ"], // for telegram
+    "ever" : ["ㄷㅍㄷㄱ" : "ㄷㅍㄷㄱ"],
+    "twit" : ["ㅅㅈㅑㅅ" : "ㅅ쟛ㅅ"], // for twitter
+    "insta" : ["ㅑㅜㄴㅅㅁ" : "ㅑㅜㄴㅅㅁ"], // for instagram
+    "face" : ["ㄹㅁㅊㄷ" : "ㄹㅁㅊㄷ"],
+    "naver" : ["ㅜㅁㅍㄷㄱ" : "ㅜㅁㅍㄷㄱ"],
+    "google" : ["ㅎㅐㅐㅎㅣㄷ" : "해ㅐ히ㄷ"],
+    "apple" : ["ㅁㅔㅔㅣㄷ" : "메ㅔㅣㄷ"],
+    "netfl" : ["ㅜㄷㅅㄹㅣ" : "ㅜㄷㅅㄹㅣ"], // for netflix
+    "disney" : ["ㅇㅑㄴㅜㄷㅛ" : "야누ㄷㅛ"], // for disney
+    "music" : ["ㅡㅕㄴㅑㅊ" : "ㅡㅕ냐ㅊ"],
+    "amazon" : ["ㅁㅡㅁㅋㅐㅜ" : "믐캐ㅜ"],
+    "fire" : ["ㄹㅑㄱㄷ" : "략ㄷ"], // for firefox
+    "xcode" : ["ㅌㅊㅐㅇㄷ" : "ㅌ챙ㄷ"],
+    "vscode" : ["ㅍㄴㅊㅐㅇㄷ" : "ㅍㄴ챙ㄷ"],
+    "key" : ["ㅏㄷㅛ" : "ㅏㄷㅛ"], // for keynote
+    "power" : ["ㅔㅐㅈㄷㄱ" : "ㅔㅐㅈㄷㄱ"],
+    "word" : ["ㅈㅐㄱㅇ" : "잭ㅇ"],
+    "excel" : ["ㄷㅌㅊㄷㅣ" : "ㄷㅌㅊㄷㅣ"],
+    "numbers" : ["ㅜㅕㅡㅠㄷㄱㄴ" : "ㅜㅕㅡㅠㄷㄱㄴ"],
+    "memo" : ["ㅡㄷㅡㅐ" : "ㅡ드ㅐ"],
+    "teams" : ["ㅅㄷㅁㅡㄴ" : "ㅅㄷ므ㄴ"],
+    "zoom" : ["ㅋㅐㅐㅡ" : "캐ㅐㅡ"],
+    "nate" : ["ㅜㅁㅅㄷ" : "ㅜㅁㅅㄷ"],
+    
+    "pip" : ["ㅔㅑㅔ" : "ㅔㅑㅔ"],
+    "root" : ["ㄱㅐㅐㅅ" : "개ㅐㅅ"],
+    "sudo" : ["ㄴㅕㅇㅐ" : "녀ㅇㅐ"],
+    "trans" : ["ㅅㄱㅁㅜㄴ" : "ㅅㄱ무ㄴ"],
+    "true" : ["ㅅㄱㅕㄷ" : "ㅅ겨ㄷ"],
+    "false" : ["ㄹㅁㅣㄴㄷ" : "ㄹ민ㄷ"],
+    // "for" : ["ㄹㅐㄱ" : "래ㄱ"], // '랙'은 가끔 사용될 수 있다고 보여짐
 ]
-
-
-
-// kakao
-// telegram
-// evernote
-// twitter
-// instagram
-// facebook
-// naver
-// google
-// apple
-// netflix
-// music
-// amazon
-// apple
-// firefox
-// xcode
-// vscode
-// keynote
-// powerpoint
-// word
-// excel
-// numbers
-// memo
-// teams
-// zoom

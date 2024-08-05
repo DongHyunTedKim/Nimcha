@@ -4,10 +4,11 @@ import Carbon
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var eventTap: CFMachPort?
+    
     @Published var currentInputSource: String = ""
     @Published var currentInputString: String = ""
-    @Published var isAutoConvertOn: Bool = false
-    
+    @Published var isAutoConvertOn: Bool = true // 바꿔야됨
+    @Published var isAccessibilityPermissionGranted: Bool = false
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         requestAccessibilityPermissions()
@@ -55,54 +56,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 print("Current Input String: \(currentInputString)")
             }
             
-            // 변환해야 할 키코드가 눌렸을 경우
+            // 변환해야 할 키코드를 눌렸을 경우
             if let character = characterForKeyCode(keyCode) {
-                
                 currentInputString.append(character)
                 print("Current Input String: \(currentInputString)")
                 
-                
-                
-                if currentInputString.hasSuffix("ㄴㅣㅁㅊㅏ") { // "님차"가 입력되면
-                    currentInputString = "님ㅊㅏ"
-                    replaceLastInput(with: "slack") // "slack"으로 대체하고
+                // KoEng -> Eng
+                if let replacement = checkForReplacement() {
+                    currentInputString = replacement.patternToDelete
+                    replaceLastInput(with: replacement.replacement)
                     currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
                     switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
-                }
-                
-                else if currentInputString.hasSuffix("ㅜㅐㅅㅑㅐㅜ") { // "ㅜㅐ샤ㅐㅜ"가 입력되면
-                    currentInputString = "ㅜㅐ샤ㅐㅜ"
-                    replaceLastInput(with: "notion") // "notion"으로 대체하고
-                    currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
-                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
-                }
-                
-                else if currentInputString.hasSuffix("ㅛㅐㅕㅅㅕㅠㄷ") { // "ㅛㅐㅕ셔ㅠㄷ"가 입력되면
-                    currentInputString = "ㅛㅐㅕ셔ㅠㄷ"
-                    replaceLastInput(with: "youtube") // "youtube"으로 대체하고
-                    currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
-                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
-                }
-                
-                else if currentInputString.hasSuffix("ㅊㅗㄱㅐㅡㄷ") {
-                    currentInputString = "초개ㅡㄷ"
-                    replaceLastInput(with: "chrome")
-                    currentInputString = ""
-                    switchToEnglishInputSource()
-                }
-                
-                else if currentInputString.hasSuffix("ㄴㅁㄹㅁㄱㅑ"){
-                    currentInputString = "ㄴㅁㄹㅁㄱㅑ"
-                    replaceLastInput(with: "safari")
-                    currentInputString = ""
-                    switchToEnglishInputSource()
-                }
-                
-                else if currentInputString.hasSuffix("ㅊㅛㅈㅐㄱㅣㅇ"){
-                    currentInputString = "쵸재기ㅇ"
-                    replaceLastInput(with: "cyworld")
-                    currentInputString = ""
-                    switchToEnglishInputSource()
                 }
             }
             
@@ -110,6 +74,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         return Unmanaged.passRetained(event)
     }
     
+    private func checkForReplacement() -> (replacement: String, patternToDelete: String)? {
+        for (replacement, patternDict) in patterns {
+            for (patternToSearch, patternToDelete) in patternDict {
+                if currentInputString.hasSuffix(patternToSearch) {
+                    return (replacement, patternToDelete)
+                }
+            }
+        }
+        return nil
+    }
+    
+    private func replaceLastInput(with replacement: String) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        
+        for _ in 0..<currentInputString.count {
+            let backspace = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: true)
+            backspace?.post(tap: .cghidEventTap)
+            let backspaceUp = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: false)
+            backspaceUp?.post(tap: .cghidEventTap)
+        }
+        
+        for char in replacement {
+            let keyCode = keyCode(for: char)
+            let keyDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
+            keyDown?.post(tap: .cghidEventTap)
+            let keyUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
+            keyUp?.post(tap: .cghidEventTap)
+        }
+    }
     
     private func characterForKeyCode(_ keyCode: Int64) -> String? {
         let keyMapping: [Int64: String] = [
@@ -120,67 +113,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             0x0: "ㅁ", // 0, a
             0x8: "ㅊ", // 8, c
             0x28: "ㅏ", // 40, k
-            
-            // - ㅜㅐ샤ㅐㅜ for Notion
             0x2D: "ㅜ", // 45, n
             0x1F: "ㅐ", // 31, o
             0x11: "ㅅ", // 17, t
             0x22: "ㅑ", // 34, i
-            //0x1F: "ㅐ", // 31, o
-            //0x2D: "ㅜ", // 45, n
-
-            // 초개ㅡㄷ for Chrome
-            //0x08: "ㅊ", // 8, c
             0x04: "ㅗ", // 4, h
             0x0F: "ㄱ", // 15, r
-            //0x1F: "ㅐ", // 31, o
             0x2E: "ㅡ", // 46, m
             0x0E: "ㄷ", // 14, e
-            
-            // ㅛㅐㅕ셔ㅠㄷ for youtube
-            //0x10: "ㅛ", // 16, y
-            //0x1F: "ㅐ", // 31, o
             0x20: "ㅕ", // 32, u
-            //0x11: "ㅅ", // 17, t
-            //0x20: "ㅕ", // 32, u
             0x0B: "ㅠ", // 11, b
-            //0x0E: "ㄷ", // 14, e
-
-            
-            // ㄴㅁㄹㅁ갸 for Sarari
-            //0x01: "ㄴ", // 1, s
-            //0x00: "ㅁ", // 0, a
             0x03: "ㄹ", // 3, f
-            //0x00: "ㅁ", // 0, a
-            //0x0F: "ㄱ", // 15, r
-            //0x22: "ㅑ", // 34, i
-            
-            // cㅛ재깅 for cyworld
-            //0x08: "ㅊ", // 8, c
             0x10: "ㅛ", // 16, y
             0x0D: "ㅈ", // 13, w
-            //0x1F: "ㅐ", // 31, o
-            //0x0F: "ㄱ", // 15, r
-            //0x25: "ㅣ", // 25, l
             0x02: "ㅇ", // 2, d
-
-
-
-            // 개ㅐㅅ for root
-            
-            // ㅔㅑㅔ for pip
+            0x23: "ㅔ", // 35, p
+            0x26: "ㅓ", // 38, j
+            0x05: "ㅎ", // 5, g
+            0x06: "ㅋ", // 6, z
+            0x07: "ㅌ", // 7, x
+            0x09: "ㅍ", // 9, v
+            0x0C: "ㅂ", // 12, q
 
             
             // ALL: 필요시 위로 가져다 쓰기
-//            0x02: "d", // 2
-//            0x05: "g", // 5
-//            0x06: "z", // 6
-//            0x07: "x", // 7
-//            0x09: "v", // 9
-//            0x0B: "b", // 11
-//            0x0C: "q", // 12
-//            0x0D: "w", // 13
-//            0x10: "y", // 16
 //            0x12: "1", // 18
 //            0x13: "2", // 19
 //            0x14: "3", // 20
@@ -194,10 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 //            0x1C: "8", // 28
 //            0x1D: "0", // 29
 //            0x1E: "]", // 30
-//            0x20: "u", // 32
 //            0x21: "[", // 33
-//            0x23: "p", // 35
-//            0x26: "j", // 38
 //            0x27: "'", // 39
 //            0x29: ";", // 41
 //            0x2A: "\\", // 42
@@ -231,76 +184,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         return keyMapping[keyCode]
     }
     
-    private func replaceLastInput(with replacement: String) {
-        let source = CGEventSource(stateID: .hidSystemState)
-        
-        for _ in 0..<currentInputString.count {
-            let backspace = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: true)
-            backspace?.post(tap: .cghidEventTap)
-            let backspaceUp = CGEvent(keyboardEventSource: source, virtualKey: 0x33, keyDown: false)
-            backspaceUp?.post(tap: .cghidEventTap)
-        }
-        
-        for char in replacement {
-            let keyCode = keyCode(for: char)
-            let keyDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
-            keyDown?.post(tap: .cghidEventTap)
-            let keyUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
-            keyUp?.post(tap: .cghidEventTap)
-        }
-    }
-    
     private func keyCode(for character: Character) -> CGKeyCode {
         // 대체할 문자열의 각 문자의 키코드를 반환합니다.
         let keyMapping: [Character: CGKeyCode] = [
-            
-            // slack
             "s": 1,
             "l": 37,
             "a": 0,
             "c": 8,
             "k": 40,
-            
-            // notion
             "n": 45,
             "o": 31,
             "t": 17,
             "i": 34,
-            //"o": 31,
-            //"n": 45
-            
-            // youtube
-            //"y": 16,
-            //"o": 31,
             "u": 32,
-            //"t": 17,
-            //"u": 32,
             "b": 11,
-            //"e": 14
-            
-            // chrome
-            //"c": 8,
             "h": 4,
             "r": 15,
-            //"o": 31,
             "m": 46,
             "e": 14,
-            
-            // safari
-            //"s": 1,
-            //"a": 0,
             "f": 3,
-            //"r": 15,
-            //"i": 34
-            
-            // cyworld
-            //"c": 8,
             "y": 16,
             "w": 13,
-            //"o": 31,
-            //"r": 15,
-            //"l": 37,
             "d": 2,
+            "g": 5,
+            "z": 6,
+            "x": 7,
+            "v": 9,
+            "q": 12,
+            "p": 35,
+            "j": 38,
         ]
         return keyMapping[character] ?? 0
     }
@@ -308,6 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func requestAccessibilityPermissions() {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         let _ = AXIsProcessTrustedWithOptions(options)
+        isAccessibilityPermissionGranted = AXIsProcessTrusted()
     }
 
     private func getCurrentKeyboardInputSourceID() -> String? {

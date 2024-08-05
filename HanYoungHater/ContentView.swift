@@ -11,13 +11,10 @@ struct ContentView: View {
             Text("HanYoungHater")
                 .font(.largeTitle)
                 .padding()
-            
             Toggle("자동 전환 켜기", isOn: $appDelegate.isAutoConvertOn)
                 .padding()
-            
             Text("현재 입력 소스: \(appDelegate.currentInputSource)")
                 .padding()
-            
             TextField("여기에 테스트 텍스트를 입력하세요", text: $testInput)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -25,7 +22,6 @@ struct ContentView: View {
                 .onChange(of: testInput) { newValue in
                     appDelegate.updateCurrentInputSource()
                 }
-            
             Spacer()
         }
         .padding()

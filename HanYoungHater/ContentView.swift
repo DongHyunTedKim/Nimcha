@@ -31,7 +31,7 @@ struct ContentView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            showingAlert = true
+            showingAlert = appDelegate.isAccessibilityPermissionGranted
             appDelegate.updateCurrentInputSource() // 화면이 나타날 때 현재 입력 소스를 초기화합니다.
         }
         .alert(isPresented: $showingAlert) {

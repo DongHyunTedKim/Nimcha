@@ -52,6 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             // delete키가 눌렸을 경우
             if keyCode == 0x33 && !currentInputString.isEmpty { // 0x33 = 51 (delete)
                 currentInputString.removeLast()
+                print("Current Input String: \(currentInputString)")
             }
             
             // 변환해야 할 키코드가 눌렸을 경우
@@ -74,14 +75,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                     switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
                 }
                 
+                else if currentInputString.hasSuffix("ㅛㅐㅕㅅㅕㅠㄷ") { // "ㅛㅐㅕ셔ㅠㄷ"가 입력되면
+                    currentInputString = "ㅛㅐㅕ셔ㅠㄷ"
+                    replaceLastInput(with: "youtube") // "youtube"으로 대체하고
+                    currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
+                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
+                }
+                
                 else if currentInputString.hasSuffix("ㅊㅗㄱㅐㅡㄷ") {
+                    currentInputString = "초개ㅡㄷ"
                     replaceLastInput(with: "chrome")
                     currentInputString = ""
                     switchToEnglishInputSource()
                 }
                 
                 else if currentInputString.hasSuffix("ㄴㅁㄹㅁㄱㅑ"){
+                    currentInputString = "ㄴㅁㄹㅁㄱㅑ"
                     replaceLastInput(with: "safari")
+                    currentInputString = ""
+                    switchToEnglishInputSource()
+                }
+                
+                else if currentInputString.hasSuffix("ㅊㅛㅈㅐㄱㅣㅇ"){
+                    currentInputString = "쵸재기ㅇ"
+                    replaceLastInput(with: "cyworld")
                     currentInputString = ""
                     switchToEnglishInputSource()
                 }
@@ -118,6 +135,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             0x2E: "ㅡ", // 46, m
             0x0E: "ㄷ", // 14, e
             
+            // ㅛㅐㅕ셔ㅠㄷ for youtube
+            //0x10: "ㅛ", // 16, y
+            //0x1F: "ㅐ", // 31, o
+            0x20: "ㅕ", // 32, u
+            //0x11: "ㅅ", // 17, t
+            //0x20: "ㅕ", // 32, u
+            0x0B: "ㅠ", // 11, b
+            //0x0E: "ㄷ", // 14, e
+
+            
             // ㄴㅁㄹㅁ갸 for Sarari
             //0x01: "ㄴ", // 1, s
             //0x00: "ㅁ", // 0, a
@@ -125,6 +152,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             //0x00: "ㅁ", // 0, a
             //0x0F: "ㄱ", // 15, r
             //0x22: "ㅑ", // 34, i
+            
+            // cㅛ재깅 for cyworld
+            //0x08: "ㅊ", // 8, c
+            0x10: "ㅛ", // 16, y
+            0x0D: "ㅈ", // 13, w
+            //0x1F: "ㅐ", // 31, o
+            //0x0F: "ㄱ", // 15, r
+            //0x25: "ㅣ", // 25, l
+            0x02: "ㅇ", // 2, d
+
+
+
+            // 개ㅐㅅ for root
+            
+            // ㅔㅑㅔ for pip
 
             
             // ALL: 필요시 위로 가져다 쓰기
@@ -225,6 +267,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             //"o": 31,
             //"n": 45
             
+            // youtube
+            //"y": 16,
+            //"o": 31,
+            "u": 32,
+            //"t": 17,
+            //"u": 32,
+            "b": 11,
+            //"e": 14
+            
             // chrome
             //"c": 8,
             "h": 4,
@@ -240,6 +291,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             //"r": 15,
             //"i": 34
             
+            // cyworld
+            //"c": 8,
+            "y": 16,
+            "w": 13,
+            //"o": 31,
+            //"r": 15,
+            //"l": 37,
+            "d": 2,
         ]
         return keyMapping[character] ?? 0
     }

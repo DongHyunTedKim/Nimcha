@@ -44,9 +44,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             
+            // 만약 현재 currentInputString이 꽉 찼을 경우, 마지막 10글자만 그대로 챙기고 나머진 지우기, 1023은 임의의 숫자임
+            if currentInputString.count >= 1023 {
+                currentInputString = String(currentInputString.suffix(10))
+            }
+            
+            // delete키가 눌렸을 경우
             if keyCode == 0x33 && !currentInputString.isEmpty { // 0x33 = 51 (delete)
                 currentInputString.removeLast()
             }
+            
+            // 변환해야 할 키코드가 눌렸을 경우
             if let character = characterForKeyCode(keyCode) {
                 
                 currentInputString.append(character)
@@ -201,11 +209,37 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func keyCode(for character: Character) -> CGKeyCode {
         // 대체할 문자열의 각 문자의 키코드를 반환합니다.
         let keyMapping: [Character: CGKeyCode] = [
+            
+            // slack
             "s": 1,
             "l": 37,
             "a": 0,
             "c": 8,
-            "k": 40
+            "k": 40,
+            
+            // notion
+            "n": 45,
+            "o": 31,
+            "t": 17,
+            "i": 34,
+            //"o": 31,
+            //"n": 45
+            
+            // chrome
+            //"c": 8,
+            "h": 4,
+            "r": 15,
+            //"o": 31,
+            "m": 46,
+            "e": 14,
+            
+            // safari
+            //"s": 1,
+            //"a": 0,
+            "f": 3,
+            //"r": 15,
+            //"i": 34
+            
         ]
         return keyMapping[character] ?? 0
     }

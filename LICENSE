@@ -7,6 +7,8 @@ Licensed under the Nimcha License, Version 1.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
+    [No URL available]
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,33 +16,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ---
-### Terms and Conditions for Use, Reproduction, and Distribution
-#### 1. Definitions
-**"License"** shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 4 of this document.
-**"Licensor"** shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
-**"You" (or "Your")** shall mean an individual or Legal Entity exercising permissions granted by this License.
-**"Source"** form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files
-**"Object"** form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.#### 2. Non-Commercial Use
+
+Terms and Conditions for Use, Reproduction, and Distribution
+
+1. Definitions
+
+"License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 4 of this document.
+
+"Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
+
+"You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
+
+"Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
+
+"Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
+
+2. Non-Commercial Use
+
 The Software may be used for personal, academic, or research purposes free of charge. Non-commercial use does not require prior permission from the Licensor.
-#### 3. Commercial Use
+
+3. Commercial Use
+
 Any commercial use of the Software requires prior written permission from the Licensor. Commercial use includes, but is not limited to, selling, distributing, integrating into commercial products or services, or any activity that generates monetary profit directly or indirectly.
-#### 4. Modification and Distribution
+
+4. Modification and Distribution
+
 Modified versions of the Software may be distributed, provided that the original copyright notice and this License are included in all copies or substantial portions of the Software. If the modified version is used for commercial purposes, prior written permission from the Licensor is required.
-#### 5. Disclaimer
+
+5. Disclaimer
+
 The Software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort, or otherwise, arising from, out of or in connection with the Software or the use or other dealings in the Software.
-Requests for commercial use permissions and any other inquiries should be directed to:
-[Contact Information]
-oversourd@gmail.com
 
-[소프트웨어 이름] 라이센스
-버전 1.0, [저작권 연도]
+Requests for commercial use permissions and any other inquiries should be directed to: oversourd@gmail.com
 
-저작권 (c) [저작권 연도] [저작권자 이름]
+Nimcha 라이센스
+버전 1.0, 2024
 
-본 파일은 [소프트웨어 이름] 라이센스, 버전 1.0 (이하 "라이센스")에 따라 사용될 수 있습니다.
+저작권 (c) 2024 TedKim
+
+본 파일은 Nimcha 라이센스, 버전 1.0 (이하 "라이센스")에 따라 사용될 수 있습니다.
 라이센스의 사본은 다음에서 확인할 수 있습니다:
 
-    [라이센스 URL]
+    [라이센스 URL 없음]
 
 관련 법률에 따라 요구되지 않는 한, 또는 서면으로 동의하지 않는 한,
 라이센스에 따라 배포된 소프트웨어는 "있는 그대로" 제공되며,
@@ -50,22 +67,35 @@ oversourd@gmail.com
 
 ---
 
-### 사용, 복제 및 배포에 대한 조건
+사용, 복제 및 배포에 대한 조건
 
-#### 1. 정의
-**"라이센스"**란 본 문서의 1조부터 4조에 정의된 사용, 복제 및 배포 조건을 의미합니다.
-**"라이센서"**란 저작권 소유자 또는 저작권 소유자가 허가한 주체를 의미하며, 라이센스를 부여하는 주체입니다.
-**"사용자"(또는 "당신")**란 본 라이센스에 따라 권한을 행사하는 개인 또는 법인을 의미합니다.
-**"소스"** 형태란 수정에 선호되는 형태를 의미하며, 여기에는 소프트웨어 소스 코드, 문서 소스 및 구성 파일이 포함되지만 이에 국한되지 않습니다.
-**"오브젝트"** 형태란 소스 형태를 기계적으로 변환하거나 번역한 결과물로, 여기에는 컴파일된 오브젝트 코드, 생성된 문서 및 기타 미디어 유형으로의 변환이 포함됩니다.
-#### 2. 비상업적 사용
+1. 정의
+
+"라이센스"란 본 문서의 1조부터 4조에 정의된 사용, 복제 및 배포 조건을 의미합니다.
+
+"라이센서"란 저작권 소유자 또는 저작권 소유자가 허가한 주체를 의미하며, 라이센스를 부여하는 주체입니다.
+
+"사용자"(또는 "당신")란 본 라이센스에 따라 권한을 행사하는 개인 또는 법인을 의미합니다.
+
+"소스" 형태란 수정에 선호되는 형태를 의미하며, 여기에는 소프트웨어 소스 코드, 문서 소스 및 구성 파일이 포함되지만 이에 국한되지 않습니다.
+
+"오브젝트" 형태란 소스 형태를 기계적으로 변환하거나 번역한 결과물로, 여기에는 컴파일된 오브젝트 코드, 생성된 문서 및 기타 미디어 유형으로의 변환이 포함됩니다.
+
+2. 비상업적 사용
+
 본 소프트웨어는 개인적, 학술적, 연구 목적으로 무료로 사용할 수 있습니다. 비상업적 사용은 라이센서의 사전 허가를 필요로 하지 않습니다.
-#### 3. 상업적 사용
+
+3. 상업적 사용
+
 본 소프트웨어를 상업적 목적으로 사용하려면 라이센서의 사전 서면 허가가 필요합니다. 상업적 사용에는 소프트웨어의 판매, 배포, 상업적 제품 또는 서비스에 통합하거나, 직접적이든 간접적이든 금전적 이익을 창출하는 모든 활동이 포함됩니다.
-#### 4. 수정 및 배포
+
+4. 수정 및 배포
+
 본 소프트웨어의 수정된 버전은 원본 저작권 고지와 본 라이센스를 모든 복제물 또는 주요 부분에 포함시키는 조건으로 배포할 수 있습니다. 수정된 버전이 상업적 목적으로 사용될 경우, 사전에 라이센서의 서면 허가가 필요합니다.
-#### 5. 면책 조항
+
+5. 면책 조항
+
 본 소프트웨어는 "있는 그대로" 제공되며, 명시적이든 묵시적이든 어떠한 종류의 보증도 제공되지 않습니다. 여기에는 상품성, 특정 목적에 대한 적합성 및 비침해에 대한 보증이 포함되지만 이에 국한되지 않습니다. 저자 또는 저작권자는 소프트웨어 또는 소프트웨어의 사용 또는 기타 거래와 관련하여 발생하는 어떠한 청구, 손해 또는 기타 책임에 대해서도 책임을 지지 않습니다.
-상업적 사용 허가 요청 및 기타 문의 사항은 다음 연락처로 문의하십시오:
-[연락처 정보]
-oversourd@gmail.com
+
+상업적 사용 허가 요청 및 기타 문의 사항은 다음 연락처로 문의하십시오: oversourd@gmail.com
+

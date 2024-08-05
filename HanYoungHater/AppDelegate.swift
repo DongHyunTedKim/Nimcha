@@ -44,7 +44,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             
+            if keyCode == 0x33 && !currentInputString.isEmpty { // 0x33 = 51 (delete)
+                currentInputString.removeLast()
+            }
             if let character = characterForKeyCode(keyCode) {
+                
                 currentInputString.append(character)
                 print("Current Input String: \(currentInputString)")
                 
@@ -56,6 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 }
                 
                 else if currentInputString.hasSuffix("ㅜㅐㅅㅑㅐㅜ") { // "ㅜㅐ샤ㅐㅜ"가 입력되면
+                    currentInputString = "ㅜㅐ샤ㅐㅜ"
                     replaceLastInput(with: "notion") // "notion"으로 대체하고
                     currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
                     switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.

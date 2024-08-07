@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         requestAccessibilityPermissions() // 접근성 권한을 요청
-        patternManager.loadPatternsFromServer() // JSON DB로부터 패턴을 로드함
+        patternManager.loadPatternsFromServer() // JSON DB로부터 패턴을 로드
         
         let eventMask: CGEventMask = (1 << CGEventType.keyDown.rawValue)
         

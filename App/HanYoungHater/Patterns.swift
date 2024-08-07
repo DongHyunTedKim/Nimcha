@@ -6,9 +6,9 @@
 //
 
 import Foundation
-// 대체어 : [입력된 문자열을 1char씩 입력받은 결과 : 삭제(대체)할 문자열의 글자수를 맞추기 위해 대체할 문자열 ]
-// e.g. slack : ["ㄴㅣㅁㅊㅏ" : "님ㅊㅏ"] // '님'은 delete 한 번으로 삭제됨
-var patterns: [String: [String: String]] = [
+
+// 기본 내장 패턴
+var patterns_default: [String: [String: String]] = [
     "slack" : ["ㄴㅣㅁㅊㅏ": "님ㅊㅏ"],
     "notion" : ["ㅜㅐㅅㅑㅐㅜ": "ㅜㅐ샤ㅐㅜ"],
     "youtube" : ["ㅛㅐㅕㅅㅕㅠㄷ": "ㅛㅐㅕ셔ㅠㄷ"],

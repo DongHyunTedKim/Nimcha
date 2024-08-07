@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9F909C442C60904100DF2D75 /* Patterns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F909C432C60904100DF2D75 /* Patterns.swift */; };
+		9FF7B7CA2C6217A500C7D723 /* PatternManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7B7C92C6217A500C7D723 /* PatternManager.swift */; };
 		9FFEBCC62C5C7AA50069BF8D /* HanYoungHaterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */; };
 		9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */; };
 		9FFEBCCA2C5C7AA60069BF8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FFEBCC92C5C7AA60069BF8D /* Assets.xcassets */; };
@@ -16,8 +17,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F7C12772C633863009A347A /* HanYoungHaterRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HanYoungHaterRelease.entitlements; sourceTree = "<group>"; };
 		9F909C432C60904100DF2D75 /* Patterns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patterns.swift; sourceTree = "<group>"; };
 		9F909C522C60D9C200DF2D75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9FF7B7C92C6217A500C7D723 /* PatternManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternManager.swift; sourceTree = "<group>"; };
 		9FFEBCC22C5C7AA50069BF8D /* HanYoungHater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanYoungHater.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanYoungHaterApp.swift; sourceTree = "<group>"; };
 		9FFEBCC72C5C7AA50069BF8D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,6 +60,7 @@
 		9FFEBCC42C5C7AA50069BF8D /* HanYoungHater */ = {
 			isa = PBXGroup;
 			children = (
+				9F7C12772C633863009A347A /* HanYoungHaterRelease.entitlements */,
 				9F909C522C60D9C200DF2D75 /* Info.plist */,
 				9FFEBCC52C5C7AA50069BF8D /* HanYoungHaterApp.swift */,
 				9FFEBCD42C5C7E650069BF8D /* AppDelegate.swift */,
@@ -65,6 +69,7 @@
 				9FFEBCCE2C5C7AA60069BF8D /* HanYoungHater.entitlements */,
 				9FFEBCCB2C5C7AA60069BF8D /* Preview Content */,
 				9F909C432C60904100DF2D75 /* Patterns.swift */,
+				9FF7B7C92C6217A500C7D723 /* PatternManager.swift */,
 			);
 			path = HanYoungHater;
 			sourceTree = "<group>";
@@ -148,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FFEBCD52C5C7E650069BF8D /* AppDelegate.swift in Sources */,
+				9FF7B7CA2C6217A500C7D723 /* PatternManager.swift in Sources */,
 				9FFEBCC82C5C7AA50069BF8D /* ContentView.swift in Sources */,
 				9F909C442C60904100DF2D75 /* Patterns.swift in Sources */,
 				9FFEBCC62C5C7AA50069BF8D /* HanYoungHaterApp.swift in Sources */,
@@ -311,7 +317,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HanYoungHater/HanYoungHater.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HanYoungHater/HanYoungHaterRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;

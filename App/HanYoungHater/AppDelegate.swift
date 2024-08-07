@@ -7,11 +7,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     @Published var currentInputSource: String = ""
     @Published var currentInputString: String = ""
-    @Published var isAutoConvertOn: Bool = true // 바꿔야됨
+    @Published var isAutoConvertOn: Bool = true // 바꿔야됨, default = false
     @Published var isAccessibilityPermissionGranted: Bool = false
     
+    var patternManager = PatternManager()
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        requestAccessibilityPermissions()
+        requestAccessibilityPermissions() // 접근성 권한을 요청
+        patternManager.loadPatternsFromServer() // JSON DB로부터 패턴을 로드함
         
         let eventMask: CGEventMask = (1 << CGEventType.keyDown.rawValue)
         
@@ -63,10 +66,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 
                 // KoEng -> Eng
                 if let replacement = checkForReplacement() {
+                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
+                    
                     currentInputString = replacement.patternToDelete
                     replaceLastInput(with: replacement.replacement)
                     currentInputString = "" // 지금까지 입력받던 currentInputString을 초기화하고
-                    switchToEnglishInputSource() // 영어 입력 소스로 전환합니다.
                 }
             }
             
@@ -75,7 +79,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     private func checkForReplacement() -> (replacement: String, patternToDelete: String)? {
-        for (replacement, patternDict) in patterns {
+        for (replacement, patternDict) in patternManager.patterns {
             for (patternToSearch, patternToDelete) in patternDict {
                 if currentInputString.hasSuffix(patternToSearch) {
                     return (replacement, patternToDelete)

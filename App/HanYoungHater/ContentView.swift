@@ -23,6 +23,11 @@ struct ContentView: View {
                     appDelegate.updateCurrentInputSource()
                 }
             Spacer()
+            
+            
+            Button("Load Patterns") {
+                appDelegate.patternManager.loadPatternsFromServer()
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

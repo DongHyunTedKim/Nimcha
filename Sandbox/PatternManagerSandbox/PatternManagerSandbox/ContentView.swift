@@ -81,12 +81,10 @@ class PatternManager: ObservableObject {
     
     func loadPatternsFromServer() {
         guard let url = URL(string: dbUrl) else {
-            print("Invalid URL")
-            
             // 기본 패턴을 로드함
-            self.patterns = patterns_default
-            print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
+            print("Invalid URL: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
             err = "Invalid URL"
+            self.patterns = patterns_default
             return
         }
         
@@ -95,9 +93,10 @@ class PatternManager: ObservableObject {
                 print("Error fetching patterns: \(error)")
 
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
                 print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
                 self.err = "Error fetching patterns"
+                self.patterns = patterns_default
+                
                 return
             }
             
@@ -105,9 +104,9 @@ class PatternManager: ObservableObject {
                 print("No data fetched")
                 
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
                 print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
                 self.err = "No data fetched"
+                self.patterns = patterns_default
                 return
             }
             
@@ -134,9 +133,9 @@ class PatternManager: ObservableObject {
                 }
             } catch {
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
                 print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다. Error decoding JSON: \(error)")
                 self.err = "Error decoding JSON"
+                self.patterns = patterns_default
             }
         }
         
@@ -149,18 +148,17 @@ func convertToDictionary(array: [[Any]]) -> [String: [String: String]] {
     var result = [String: [String: String]]()
     
     for item in array {
-        if let replacement = item[0] as? String,
+        if let output = item[0] as? String,
            let input = item[1] as? String,
            let delete = item[2] as? String {
-            result[replacement] = [input: delete]
+            result[output] = [input: delete]
         }
     }
     
     return result
 }
 
-// 테스트데이터
-// JSON서버에서 JSON을 받아와서 디코드 + convertToDictionary 함수로 얻고자 하는 데이터 형태
+// 기본 내장 패턴
 var patterns_default: [String: [String: String]] = [
     "slack" : ["ㄴㅣㅁㅊㅏ": "님ㅊㅏ"],
     "notion" : ["ㅜㅐㅅㅑㅐㅜ": "ㅜㅐ샤ㅐㅜ"],
@@ -205,35 +203,35 @@ var patterns_default: [String: [String: String]] = [
 ]
 
 // JSON을 받아왔다고 가정할 때 사용함
-let arrayData: [[Any]] = [
-    ["slack", "ㄴㅣㅁㅊㅏ", "님ㅊㅏ"],
-    ["notion", "ㅜㅐㅅㅑㅐㅜ", "ㅜㅐ샤ㅐㅜ"],
-    ["youtube", "ㅛㅐㅕㅅㅕㅠㄷ", "ㅛㅐㅕ셔ㅠㄷ"],
-    ["chrome", "ㅊㅗㄱㅐㅡㄷ", "초개ㅡㄷ"],
-    ["safari", "ㄴㅁㄹㅁㄱㅑ", "ㄴㅁㄹㅁㄱㅑ"],
-    ["cyworld", "ㅊㅛㅈㅐㄱㅣㅇ", "쵸재기ㅇ"],
-    ["kakao", "ㅏㅁㅏㅁㅐ", "ㅏ마매"],
-    ["tele", "ㅅㄷㅣㄷ", "ㅅ디ㄷ"],
-    ["ever", "ㄷㅍㄷㄱ", "ㄷㅍㄷㄱ"],
-    ["twit", "ㅅㅈㅑㅅ", "ㅅ쟛ㅅ"],
-    ["insta", "ㅑㅜㄴㅅㅁ", "ㅑㅜㄴㅅㅁ"],
-    ["face", "ㄹㅁㅊㄷ", "ㄹㅁㅊㄷ"],
-    ["naver", "ㅜㅁㅍㄷㄱ", "ㅜㅁㅍㄷㄱ"],
-    ["google", "ㅎㅐㅐㅎㅣㄷ", "해ㅐ히ㄷ"],
-    ["apple", "ㅁㅔㅔㅣㄷ", "메ㅔㅣㄷ"],
-    ["netfl", "ㅜㄷㅅㄹㅣ", "ㅜㄷㅅㄹㅣ"],
-    ["disney", "ㅇㅑㄴㅜㄷㅛ", "야누ㄷㅛ"],
-    ["music", "ㅡㅕㄴㅑㅊ", "ㅡㅕ냐ㅊ"],
-    ["amazon", "ㅁㅡㅁㅋㅐㅜ", "믐캐ㅜ"],
-    ["fire", "ㄹㅑㄱㄷ", "략ㄷ"],
-    ["xcode", "ㅌㅊㅐㅇㄷ", "ㅌ챙ㄷ"],
-    ["vscode", "ㅍㄴㅊㅐㅇㄷ", "ㅍㄴ챙ㄷ"],
-    ["key", "ㅏㄷㅛ", "ㅏㄷㅛ"],
-    ["power", "ㅔㅐㅈㄷㄱ", "ㅔㅐㅈㄷㄱ"],
-    ["word", "ㅈㅐㄱㅇ", "잭ㅇ"],
-    ["excel", "ㄷㅌㅊㄷㅣ", "ㄷㅌㅊㄷㅣ"],
-    ["numbers", "ㅜㅕㅡㅠㄷㄱㄴ", "ㅜㅕㅡㅠㄷㄱㄴ"],
-    ["memo", "ㅡㄷㅡㅐ", "ㅡ드ㅐ"],
-    ["teams", "ㅅㄷㅁㅡㄴ", "ㅅㄷ므ㄴ"],
-    ["zoom", "ㅋㅐㅐㅡ", "캐ㅐㅡ"]
-]
+//let arrayData: [[Any]] = [
+//    ["slack", "ㄴㅣㅁㅊㅏ", "님ㅊㅏ"],
+//    ["notion", "ㅜㅐㅅㅑㅐㅜ", "ㅜㅐ샤ㅐㅜ"],
+//    ["youtube", "ㅛㅐㅕㅅㅕㅠㄷ", "ㅛㅐㅕ셔ㅠㄷ"],
+//    ["chrome", "ㅊㅗㄱㅐㅡㄷ", "초개ㅡㄷ"],
+//    ["safari", "ㄴㅁㄹㅁㄱㅑ", "ㄴㅁㄹㅁㄱㅑ"],
+//    ["cyworld", "ㅊㅛㅈㅐㄱㅣㅇ", "쵸재기ㅇ"],
+//    ["kakao", "ㅏㅁㅏㅁㅐ", "ㅏ마매"],
+//    ["tele", "ㅅㄷㅣㄷ", "ㅅ디ㄷ"],
+//    ["ever", "ㄷㅍㄷㄱ", "ㄷㅍㄷㄱ"],
+//    ["twit", "ㅅㅈㅑㅅ", "ㅅ쟛ㅅ"],
+//    ["insta", "ㅑㅜㄴㅅㅁ", "ㅑㅜㄴㅅㅁ"],
+//    ["face", "ㄹㅁㅊㄷ", "ㄹㅁㅊㄷ"],
+//    ["naver", "ㅜㅁㅍㄷㄱ", "ㅜㅁㅍㄷㄱ"],
+//    ["google", "ㅎㅐㅐㅎㅣㄷ", "해ㅐ히ㄷ"],
+//    ["apple", "ㅁㅔㅔㅣㄷ", "메ㅔㅣㄷ"],
+//    ["netfl", "ㅜㄷㅅㄹㅣ", "ㅜㄷㅅㄹㅣ"],
+//    ["disney", "ㅇㅑㄴㅜㄷㅛ", "야누ㄷㅛ"],
+//    ["music", "ㅡㅕㄴㅑㅊ", "ㅡㅕ냐ㅊ"],
+//    ["amazon", "ㅁㅡㅁㅋㅐㅜ", "믐캐ㅜ"],
+//    ["fire", "ㄹㅑㄱㄷ", "략ㄷ"],
+//    ["xcode", "ㅌㅊㅐㅇㄷ", "ㅌ챙ㄷ"],
+//    ["vscode", "ㅍㄴㅊㅐㅇㄷ", "ㅍㄴ챙ㄷ"],
+//    ["key", "ㅏㄷㅛ", "ㅏㄷㅛ"],
+//    ["power", "ㅔㅐㅈㄷㄱ", "ㅔㅐㅈㄷㄱ"],
+//    ["word", "ㅈㅐㄱㅇ", "잭ㅇ"],
+//    ["excel", "ㄷㅌㅊㄷㅣ", "ㄷㅌㅊㄷㅣ"],
+//    ["numbers", "ㅜㅕㅡㅠㄷㄱㄴ", "ㅜㅕㅡㅠㄷㄱㄴ"],
+//    ["memo", "ㅡㄷㅡㅐ", "ㅡ드ㅐ"],
+//    ["teams", "ㅅㄷㅁㅡㄴ", "ㅅㄷ므ㄴ"],
+//    ["zoom", "ㅋㅐㅐㅡ", "캐ㅐㅡ"]
+//]

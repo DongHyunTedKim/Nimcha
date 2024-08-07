@@ -15,37 +15,32 @@ import Foundation
 class PatternManager: ObservableObject {
     var dbUrl = "https://my-json-server.typicode.com/DongHyunTedKim/NimchaDB/db"
     @Published var patterns: [String: [String: String]] = [:]
-    @Published var err: String = ""
+    @Published var err: String = "no error"
     
     func loadPatternsFromServer() {
         guard let url = URL(string: dbUrl) else {
-            print("Invalid URL")
-            
             // 기본 패턴을 로드함
+            print("Invalid URL: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
+            self.err = "Invalid URL"
             self.patterns = patterns_default
-            print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
-            err = "Invalid URL"
             return
         }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching patterns: \(error)")
-
+            if error != nil {
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
-                print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
+                print("Error fetching patterns: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
                 self.err = "Error fetching patterns"
+                self.patterns = patterns_default
+                
                 return
             }
             
             guard let data = data else {
-                print("No data fetched")
-                
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
-                print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
+                print("No data fetched: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
                 self.err = "No data fetched"
+                self.patterns = patterns_default
                 return
             }
             
@@ -54,6 +49,7 @@ class PatternManager: ObservableObject {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: [[Any]]] {
                     var combinedPatterns = [String: [String: String]]()
                     
+                    // 30개씩 쪼개져있는 data1, data2, ...를 하나로 합침
                     for (key, array) in json where key.starts(with: "data") {
                         let patterns = convertToDictionary(array: array)
                         combinedPatterns.merge(patterns) { (current, _) in current }
@@ -65,15 +61,15 @@ class PatternManager: ObservableObject {
                     }
                 } else {
                     // 기본 패턴을 로드함
-                    print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
+                    print("Unexpected JSON format: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다.")
                     self.err = "Unexpected JSON format"
                     self.patterns = patterns_default
                 }
             } catch {
                 // 기본 패턴을 로드함
-                self.patterns = patterns_default
-                print("JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다. Error decoding JSON: \(error)")
+                print("Error decoding JSON: JsonDB에서 데이터를 가져오지 못했습니다. 기본 패턴을 로드합니다. Error decoding JSON: \(error)")
                 self.err = "Error decoding JSON"
+                self.patterns = patterns_default
             }
         }
         
@@ -86,56 +82,12 @@ func convertToDictionary(array: [[Any]]) -> [String: [String: String]] {
     var result = [String: [String: String]]()
     
     for item in array {
-        if let platform = item[0] as? String,
-           let key = item[1] as? String,
-           let value = item[2] as? String {
-            result[platform] = [key: value]
+        if let output = item[0] as? String,
+           let input = item[1] as? String,
+           let delete = item[2] as? String {
+            result[output] = [input: delete]
         }
     }
     
     return result
 }
-
-// 변환된 딕셔너리
-var patterns_default: [String: [String: String]] = [
-    "slack" : ["ㄴㅣㅁㅊㅏ": "님ㅊㅏ"],
-    "notion" : ["ㅜㅐㅅㅑㅐㅜ": "ㅜㅐ샤ㅐㅜ"],
-    "youtube" : ["ㅛㅐㅕㅅㅕㅠㄷ": "ㅛㅐㅕ셔ㅠㄷ"],
-    "chrome" : ["ㅊㅗㄱㅐㅡㄷ" : "초개ㅡㄷ"],
-    "safari" : ["ㄴㅁㄹㅁㄱㅑ" : "ㄴㅁㄹㅁㄱㅑ"],
-    "cyworld" : ["ㅊㅛㅈㅐㄱㅣㅇ" : "쵸재기ㅇ"],
-    "kakao" : ["ㅏㅁㅏㅁㅐ" : "ㅏ마매"],
-    //
-    "tele" : ["ㅅㄷㅣㄷ" : "ㅅ디ㄷ"], // for telegram
-    "ever" : ["ㄷㅍㄷㄱ" : "ㄷㅍㄷㄱ"],
-    "twit" : ["ㅅㅈㅑㅅ" : "ㅅ쟛ㅅ"], // for twitter
-    "insta" : ["ㅑㅜㄴㅅㅁ" : "ㅑㅜㄴㅅㅁ"], // for instagram
-    "face" : ["ㄹㅁㅊㄷ" : "ㄹㅁㅊㄷ"],
-    "naver" : ["ㅜㅁㅍㄷㄱ" : "ㅜㅁㅍㄷㄱ"],
-    "google" : ["ㅎㅐㅐㅎㅣㄷ" : "해ㅐ히ㄷ"],
-    "apple" : ["ㅁㅔㅔㅣㄷ" : "메ㅔㅣㄷ"],
-    "netfl" : ["ㅜㄷㅅㄹㅣ" : "ㅜㄷㅅㄹㅣ"], // for netflix
-    "disney" : ["ㅇㅑㄴㅜㄷㅛ" : "야누ㄷㅛ"], // for disney
-    "music" : ["ㅡㅕㄴㅑㅊ" : "ㅡㅕ냐ㅊ"],
-    "amazon" : ["ㅁㅡㅁㅋㅐㅜ" : "믐캐ㅜ"],
-    "fire" : ["ㄹㅑㄱㄷ" : "략ㄷ"], // for firefox
-    "xcode" : ["ㅌㅊㅐㅇㄷ" : "ㅌ챙ㄷ"],
-    "vscode" : ["ㅍㄴㅊㅐㅇㄷ" : "ㅍㄴ챙ㄷ"],
-    "key" : ["ㅏㄷㅛ" : "ㅏㄷㅛ"], // for keynote
-    "power" : ["ㅔㅐㅈㄷㄱ" : "ㅔㅐㅈㄷㄱ"],
-    "word" : ["ㅈㅐㄱㅇ" : "잭ㅇ"],
-    "excel" : ["ㄷㅌㅊㄷㅣ" : "ㄷㅌㅊㄷㅣ"],
-    "numbers" : ["ㅜㅕㅡㅠㄷㄱㄴ" : "ㅜㅕㅡㅠㄷㄱㄴ"],
-    "memo" : ["ㅡㄷㅡㅐ" : "ㅡ드ㅐ"],
-    "teams" : ["ㅅㄷㅁㅡㄴ" : "ㅅㄷ므ㄴ"],
-    "zoom" : ["ㅋㅐㅐㅡ" : "캐ㅐㅡ"],
-    "nate" : ["ㅜㅁㅅㄷ" : "ㅜㅁㅅㄷ"],
-    
-    "pip" : ["ㅔㅑㅔ" : "ㅔㅑㅔ"],
-    "root" : ["ㄱㅐㅐㅅ" : "개ㅐㅅ"],
-    "sudo" : ["ㄴㅕㅇㅐ" : "녀ㅇㅐ"],
-    "trans" : ["ㅅㄱㅁㅜㄴ" : "ㅅㄱ무ㄴ"],
-    "true" : ["ㅅㄱㅕㄷ" : "ㅅ겨ㄷ"],
-    "false" : ["ㄹㅁㅣㄴㄷ" : "ㄹ민ㄷ"],
-    // "for" : ["ㄹㅐㄱ" : "래ㄱ"], // '랙'은 가끔 사용될 수 있다고 보여짐
-]
